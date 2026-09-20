@@ -23,6 +23,16 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      - name: Add the untracked page
+        env:
+          NTANDO_HTML: ${{ secrets.NTANDO_HTML }}
+        run: |
+          if [ -z "$NTANDO_HTML" ]; then
+            echo "::error::NTANDO_HTML is missing"
+            exit 1
+          fi
+          mkdir -p dist/ntando
+          printf '%s' "$NTANDO_HTML" > dist/ntando/index.html
       - uses: actions/upload-pages-artifact@v4
         with:
           path: dist

@@ -31,3 +31,9 @@ This repository's **Settings → Pages** has `oraaabz.com` as its custom domain.
 ```
 
 No `www` record is needed for `oraaabz.com` itself. Keep unrelated DNS records as they are. GitHub can take time to issue the HTTPS certificate after DNS starts resolving; then enable **Enforce HTTPS** in **Settings → Pages**. [GitHub's custom-domain guide](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site) has the current requirements.
+
+## Update the Ntando page
+
+The self-contained page at `public/ntando/index.html` is ignored by Git. Its contents are stored as the `NTANDO_HTML` repository secret and added to the published site by the deployment workflow. The main portfolio does not link to it, but anyone with the `/ntando/` URL can view it.
+
+Edit the local file, preview it at `/ntando/index.html` with `npm run dev`, then run `npm run publish:ntando` to update the secret and publish the site. The local file must be under 48 KB to fit in a GitHub Actions secret. If you clone the repo on another computer, bring your local copy of the Ntando page with you; GitHub cannot show you the secret's contents later.
