@@ -3,13 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0081a7" />
-    <meta name="description" content="Meet Oarabile Moima: a Cape Town based software developer who enjoys solving problems, creating content, and seeing good ideas come to life." />
+    <meta name="theme-color" content="#fffaf3" />
+    <meta name="description" content="Meet Oarabile Moima: a Pretoria-raised technical creative into engineering, photography, books and Barça." />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Oarabile Moima · Software Developer" />
-    <meta property="og:description" content="A little about Oarabile Moima, a problem solver and software developer based in Cape Town." />
+    <meta property="og:title" content="Oarabile Moima · Technical Creative" />
+    <meta property="og:description" content="Pretoria raised. Engineering, photography, books and Barça." />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
-    <title>Oarabile Moima · Software Developer</title>
+    <title>Oarabile Moima · Technical Creative</title>
+    <script>
+      (() => {
+        const systemTheme = matchMedia('(prefers-color-scheme: dark)').matches ? 'sunset' : 'sunrise';
+        let savedTheme;
+
+        try {
+          savedTheme = localStorage.getItem('oraaabz-theme');
+        } catch {
+          savedTheme = null;
+        }
+
+        document.documentElement.dataset.theme =
+          savedTheme === 'sunrise' || savedTheme === 'sunset' ? savedTheme : systemTheme;
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>

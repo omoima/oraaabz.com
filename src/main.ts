@@ -19,6 +19,10 @@ const escapeHtml = (value: string): string =>
 
 const email = escapeHtml(content.email);
 
+type Theme = 'sunrise' | 'sunset';
+
+const initialTheme = document.documentElement.dataset.theme === 'sunset' ? 'sunset' : 'sunrise';
+
 app.innerHTML = `
   <div class="layout">
     <aside class="blue-panel" aria-label="A little more about Oarabile">
@@ -41,7 +45,17 @@ app.innerHTML = `
     </aside>
 
     <main class="main-panel">
-      <div class="topline"><span>PROBLEM SOLVER / CREATIVE</span><span>HELLO FROM CAPE TOWN</span></div>
+      <div class="topbar">
+        <div class="topline"><span>TECHNICAL / CREATIVE</span><span>HELLO FROM CAPE TOWN</span></div>
+        <div class="theme-switch" role="group" aria-label="Colour mode">
+          <button class="theme-option" type="button" data-theme-value="sunrise" aria-label="Use sunrise light mode" aria-pressed="${initialTheme === 'sunrise'}">
+            <span aria-hidden="true">☀︎</span><span>Sunrise</span>
+          </button>
+          <button class="theme-option" type="button" data-theme-value="sunset" aria-label="Use sunset dark mode" aria-pressed="${initialTheme === 'sunset'}">
+            <span aria-hidden="true">☾</span><span>Sunset</span>
+          </button>
+        </div>
+      </div>
 
       <div class="intro-block">
         <p class="hello">HELLO, I'M</p>
@@ -68,11 +82,43 @@ app.innerHTML = `
         <div class="social-links">
           <a href="${escapeHtml(content.github)}" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
           <a href="${escapeHtml(content.linkedin)}" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+          <a href="${escapeHtml(content.instagram)}" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+          <a href="${escapeHtml(content.twitter)}" target="_blank" rel="noopener noreferrer">X ↗</a>
         </div>
       </footer>
     </main>
   </div>
 `;
+
+const themeButtons = document.querySelectorAll<HTMLButtonElement>('[data-theme-value]');
+const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+
+const applyTheme = (theme: Theme, persist = true): void => {
+  document.documentElement.dataset.theme = theme;
+  document.documentElement.style.colorScheme = theme === 'sunset' ? 'dark' : 'light';
+  themeColor?.setAttribute('content', theme === 'sunset' ? '#171021' : '#fffaf3');
+
+  themeButtons.forEach((button) => {
+    button.setAttribute('aria-pressed', String(button.dataset.themeValue === theme));
+  });
+
+  if (persist) {
+    try {
+      window.localStorage.setItem('oraaabz-theme', theme);
+    } catch {
+      // The selected theme still applies when storage is unavailable.
+    }
+  }
+};
+
+applyTheme(initialTheme, false);
+
+themeButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const theme = button.dataset.themeValue;
+    if (theme === 'sunrise' || theme === 'sunset') applyTheme(theme);
+  });
+});
 
 const copyButton = document.querySelector<HTMLButtonElement>('#copy-email');
 const copyStatus = document.querySelector<HTMLElement>('#copy-status');
