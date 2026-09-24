@@ -1,0 +1,38 @@
+name: Demo flow
+
+on:
+  push:
+    branches: [demo-flow]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: demo-flow-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Check the demo is built and the showcase notes are not
+        run: |
+          test -f dist/demos/flitecare/index.html || { echo "::error::Flitecare demo page is missing"; exit 1; }
+          grep -q 'noindex' dist/demos/flitecare/index.html || { echo "::error::Demo page must stay noindex"; exit 1; }
+          if grep -rqi 'demo-showcase' dist; then echo "::error::demo-showcase.md leaked into the build"; exit 1; fi
+          if grep -qi 'flitecare' dist/index.html; then echo "::error::The portfolio homepage must not link the demo"; exit 1; fi
+      - name: Save the demo build
+        uses: actions/upload-artifact@v4
+        with:
+          name: flitecare-demo
+          path: dist
+          if-no-files-found: error

@@ -32,6 +32,12 @@ This repository's **Settings → Pages** has `oraaabz.com` as its custom domain.
 
 No `www` record is needed for `oraaabz.com` itself. Keep unrelated DNS records as they are. GitHub can take time to issue the HTTPS certificate after DNS starts resolving; then enable **Enforce HTTPS** in **Settings → Pages**. [GitHub's custom-domain guide](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site) has the current requirements.
 
+## Client demos
+
+Concept sites for prospective clients are built with the portfolio but not linked from it, and each one is marked `noindex`. The Flitecare demo lives in [`demos/flitecare/index.html`](demos/flitecare/index.html) and [`src/demos/flitecare/`](src/demos/flitecare/) and is served at `/demos/flitecare/`. Preview it with `npm run dev`.
+
+Pitch notes are in `demo-showcase.md` at the repository root. That file is tracked in Git but never built into the site. The repository is public, so keep the notes client-safe. The **Demo flow** workflow ([`.github/workflows/demo.yml`](.github/workflows/demo.yml)) builds the site, checks that the demo exists and the notes stay out of `dist/`, and uploads a `flitecare-demo` artifact.
+
 ## Update the Ntando page
 
 The self-contained page at `public/ntando/index.html` is ignored by Git. Its contents are stored as the `NTANDO_HTML` repository secret and added to the published site by the deployment workflow. The main portfolio does not link to it, but anyone with the `/ntando/` URL can view it.
