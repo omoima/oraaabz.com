@@ -20,4 +20,4 @@ execFileSync('gh', ['workflow', 'run', 'deploy.yml', '--repo', repo, '--ref', 'm
   stdio: 'inherit',
 });
 
-console.log('The updated page is queued for publishing at /ntando/.');
+console.log('The updated page secret is saved and a site build is queued. This workflow does not deploy the site.');

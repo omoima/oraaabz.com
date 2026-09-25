@@ -1,27 +1,13 @@
 import './style.css';
 import { content } from './content';
+import { escapeHtml } from './html';
+import { initTheme, renderThemeSwitch } from './theme';
 
 const app = document.querySelector<HTMLDivElement>('#app');
 
 if (!app) throw new Error('The app root was not found.');
 
-const escapeHtml = (value: string): string =>
-  value.replace(/[&<>"']/g, (character) => {
-    const entities: Record<string, string> = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;',
-    };
-    return entities[character];
-  });
-
 const email = escapeHtml(content.email);
-
-type Theme = 'sunrise' | 'sunset';
-
-const initialTheme = document.documentElement.dataset.theme === 'sunset' ? 'sunset' : 'sunrise';
 
 app.innerHTML = `
   <div class="layout">
@@ -47,14 +33,7 @@ app.innerHTML = `
     <main class="main-panel">
       <div class="topbar">
         <div class="topline"><span>TECHNICAL / CREATIVE</span><span>HELLO FROM CAPE TOWN</span></div>
-        <div class="theme-switch" role="group" aria-label="Colour mode">
-          <button class="theme-option" type="button" data-theme-value="sunrise" aria-label="Use sunrise light mode" aria-pressed="${initialTheme === 'sunrise'}">
-            <span aria-hidden="true">☀︎</span><span>Sunrise</span>
-          </button>
-          <button class="theme-option" type="button" data-theme-value="sunset" aria-label="Use sunset dark mode" aria-pressed="${initialTheme === 'sunset'}">
-            <span aria-hidden="true">☾</span><span>Sunset</span>
-          </button>
-        </div>
+        ${renderThemeSwitch()}
       </div>
 
       <div class="intro-block">
@@ -65,6 +44,11 @@ app.innerHTML = `
         <p class="current">${escapeHtml(content.current)}</p>
         <p class="tools-line">${escapeHtml(content.tools)}</p>
         <p class="fpl-note">${escapeHtml(content.fpl)}</p>
+
+        <div class="photography-entry">
+          <p>${escapeHtml(content.photography)}</p>
+          <a class="photography-link" href="/photography/">View photography <span aria-hidden="true">→</span></a>
+        </div>
 
         <div class="contact-block">
           <span class="contact-label">LET'S CONNECT</span>
@@ -90,35 +74,7 @@ app.innerHTML = `
   </div>
 `;
 
-const themeButtons = document.querySelectorAll<HTMLButtonElement>('[data-theme-value]');
-const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-
-const applyTheme = (theme: Theme, persist = true): void => {
-  document.documentElement.dataset.theme = theme;
-  document.documentElement.style.colorScheme = theme === 'sunset' ? 'dark' : 'light';
-  themeColor?.setAttribute('content', theme === 'sunset' ? '#171021' : '#fffaf3');
-
-  themeButtons.forEach((button) => {
-    button.setAttribute('aria-pressed', String(button.dataset.themeValue === theme));
-  });
-
-  if (persist) {
-    try {
-      window.localStorage.setItem('oraaabz-theme', theme);
-    } catch {
-      // The selected theme still applies when storage is unavailable.
-    }
-  }
-};
-
-applyTheme(initialTheme, false);
-
-themeButtons.forEach((button) => {
-  button.addEventListener('click', () => {
-    const theme = button.dataset.themeValue;
-    if (theme === 'sunrise' || theme === 'sunset') applyTheme(theme);
-  });
-});
+initTheme();
 
 const copyButton = document.querySelector<HTMLButtonElement>('#copy-email');
 const copyStatus = document.querySelector<HTMLElement>('#copy-status');

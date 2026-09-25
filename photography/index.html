@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fffaf3" />
+    <meta name="description" content="Photography by Oarabile Moima. A little of what catches my eye." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Photography · Oarabile Moima" />
+    <meta property="og:description" content="A little of what catches my eye. Photography by Oarabile Moima." />
+    <meta property="og:url" content="https://oraaabz.com/photography/" />
+    <link rel="canonical" href="https://oraaabz.com/photography/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>Photography · Oarabile Moima</title>
+    <script>
+      (() => {
+        const systemTheme = matchMedia('(prefers-color-scheme: dark)').matches ? 'sunset' : 'sunrise';
+        let savedTheme;
+
+        try {
+          savedTheme = localStorage.getItem('oraaabz-theme');
+        } catch {
+          savedTheme = null;
+        }
+
+        const theme = savedTheme === 'sunrise' || savedTheme === 'sunset' ? savedTheme : systemTheme;
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme === 'sunset' ? 'dark' : 'light';
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'sunset' ? '#171021' : '#fffaf3');
+      })();
+    </script>
+  </head>
+  <body class="photography-page">
+    <a class="skip-link" href="#photography">Skip to photographs</a>
+    <div class="photography-shell">
+      <header class="photography-header">
+        <a class="wordmark photography-wordmark" href="/" aria-label="Oarabile Moima — home">{{WORDMARK}}<span>.</span></a>
+        <div class="photography-header-actions">
+          <nav aria-label="Main navigation"><a class="home-link" href="/">Home</a></nav>
+          {{THEME_SWITCH}}
+        </div>
+      </header>
+
+      <main id="photography" tabindex="-1">
+        <section class="photography-opening" aria-labelledby="photography-title">
+          <div class="photography-intro">
+            <p class="photography-eyebrow">SELECTED MOMENTS</p>
+            <h1 id="photography-title">Photography</h1>
+            <p class="photography-description">A few people, places and moments I want to remember.</p>
+            <span class="photography-intro-rule" aria-hidden="true"></span>
+          </div>
+          {{OPENING_PHOTOGRAPH}}
+        </section>
+        {{PHOTOGRAPHS}}
+      </main>
+
+      <footer class="photography-footer">
+        <span>© {{YEAR}} {{NAME}}</span>
+        <a href="{{INSTAGRAM}}">Find me on Instagram <span aria-hidden="true">↗</span></a>
+      </footer>
+    </div>
+    <script type="module" src="/src/photography-page.ts"></script>
+  </body>
+</html>

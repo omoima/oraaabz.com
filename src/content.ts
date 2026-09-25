@@ -15,6 +15,7 @@ export const content = {
     'I’m a software developer fascinated by what good software can do for people, and by the data behind it. I enjoy learning new ways to work and helping a team reach its goal, whether I’m leading or supporting.',
   tools: 'I still love Python and data; lately I’ve been using TypeScript and AI a lot, too.',
   fpl: 'I once reached No. 1 in South Africa in Fantasy Premier League. Football and data are a good match for me.',
+  photography: 'Photography is another part of how I see the world.',
   roots: 'Pretoria raised.',
   personal: 'I’m a technical creative. I enjoy engineering, photography, books and Barça.',
 } as const;
